@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platino Costa Rica</title>
+
+<style>
+:root{
+--card:#1a1d23;
+--accent:#ff2a2a;
+--text:#e8ecf1;
+--muted:#9aa4b2;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+body{
+background:
+radial-gradient(circle at 20% 30%, rgba(255,0,0,.15), transparent 40%),
+radial-gradient(circle at 80% 70%, rgba(255,0,0,.12), transparent 40%),
+linear-gradient(160deg,#000,#111,#1a1a1a,#0f1115);
+color:var(--text);
+}
+.container{max-width:600px;margin:auto;padding:16px}
+header{text-align:center;padding:28px 10px}
+
+.logo{
+width:110px;margin:auto;display:block;border-radius:18px;
+box-shadow:0 0 25px rgba(255,0,0,.5);
+animation:logoIntro 1.3s ease forwards;
+opacity:0;transform:scale(.7);
+}
+@keyframes logoIntro{to{opacity:1;transform:scale(1)}}
+
+.logo-wrapper{position:relative;display:inline-block;overflow:hidden}
+.logo-wrapper::after{
+content:"";position:absolute;top:0;left:-75%;width:50%;height:100%;
+background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
+transform:skewX(-25deg);animation:shine 3s infinite;
+}
+@keyframes shine{100%{left:125%}}
+
+h1{margin-top:16px;font-size:1.8rem}
+.subtitle{color:var(--muted);margin-top:4px;font-size:.95rem}
+
+.socials{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+
+.btn{
+padding:10px 16px;border-radius:12px;
+background:linear-gradient(145deg,#ff2a2a,#b30000);
+color:white;text-decoration:none;font-size:.9rem;
+display:flex;align-items:center;gap:6px;
+box-shadow:0 4px 15px rgba(255,0,0,.35);transition:.25s;
+}
+.btn:hover{transform:scale(1.05)}
+
+.section-title{margin:30px 0 14px;font-size:1.3rem;text-align:center}
+
+.card{
+background:var(--card);
+border-radius:18px;padding:14px;margin-bottom:16px;
+box-shadow:0 4px 18px rgba(0,0,0,.4);
+border:1px solid rgba(255,0,0,.15);
+opacity:0;transform:translateY(40px);transition:.9s;
+}
+
+
+.card img{width:100%;border-radius:12px;height:140px;object-fit:cover}
+
+.location-name{font-weight:600;margin-top:10px;font-size:1.1rem}
+.address{font-size:.9rem;color:var(--muted);margin:6px 0 6px}
+
+.status{font-size:.8rem;margin-bottom:10px;font-weight:600}
+.open{color:#00ff88}
+.closed{color:#ff3b3b}
+
+.actions{display:flex;gap:8px}
+.actions a{
+flex:1;text-align:center;background:#20242c;color:white;
+padding:10px;border-radius:10px;text-decoration:none;font-size:.85rem;
+border:1px solid rgba(255,0,0,.2);transition:.25s;
+}
+.actions a:hover{transform:scale(1.05);border-color:#ff2a2a}
+
+footer{text-align:center;margin:30px 0 10px;color:#6b7380;font-size:.85rem}
+
+#nearBtn{
+position:fixed;bottom:20px;right:20px;background:#ff2a2a;color:white;
+border:none;padding:14px 18px;border-radius:50px;font-weight:600;
+cursor:pointer;box-shadow:0 0 20px rgba(255,0,0,.6);z-index:999;
+}
+.open{color:#00ff88;animation:pulse 2s infinite}
+.closing{color:#ffcc00;animation:pulse2 1.5s infinite}
+.closed{color:#ff3b3b}
+
+@keyframes pulse{
+0%{text-shadow:0 0 5px #00ff88}
+50%{text-shadow:0 0 20px #00ff88}
+100%{text-shadow:0 0 5px #00ff88}
+}
+
+@keyframes pulse2{
+0%{text-shadow:0 0 5px #ffcc00}
+50%{text-shadow:0 0 20px #ffcc00}
+100%{text-shadow:0 0 5px #ffcc00}
+}
+
+/* hover pro */
+.card:hover{
+transform:translateY(-6px) scale(1.02);
+transition:.3s;
+}
+
+/* bounce */
+.actions a:active{
+transform:scale(.9);
+}
+
+/* ILUMINACIÓN PRO + PULSO */
+.card.active{
+opacity:1;
+transform:translateY(0);
+box-shadow:0 0 40px rgba(255,0,0,.6),
+0 0 80px rgba(255,0,0,.2);
+animation:glowPulse 2s infinite;
+}
+
+/* ANIMACIÓN */
+@keyframes glowPulse{
+0%{
+box-shadow:0 0 20px rgba(255,0,0,.4);
+}
+50%{
+box-shadow:0 0 60px rgba(255,0,0,.9),
+0 0 100px rgba(255,0,0,.4);
+}
+100%{
+box-shadow:0 0 20px rgba(255,0,0,.4);
+}
+}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+<div class="logo-wrapper">
+<img src="imagenes/logo.jpeg" class="logo">
+</div>
+<h1>Platino Costa Rica</h1>
+<div class="subtitle">AUTOPARTES Y ACCESORIOS</div>
+<div class="subtitle" id="visits"></div>
+
+<div class="socials">
+
+<a class="btn" href="https://www.facebook.com/platinocr" target="_blank">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
+<path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2.3V12h2.3V9.8c0-2.3 1.4-3.6 3.5-3.6 1 0 2 .2 2 .2v2.2h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12"/>
+</svg>
+&nbsp;Facebook
+</a>
+
+<a class="btn" href="https://www.instagram.com/platinocr?igsh=MXFjaTU3Ym1jeW8yMA==" target="_blank">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
+<path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5.3A4.7 4.7 0 1 1 7.3 12 4.7 4.7 0 0 1 12 7.3zm0 7.7A3 3 0 1 0 9 12a3 3 0 0 0 3 3zm4.8-8.5a1.1 1.1 0 1 1-1.1-1.1 1.1 1.1 0 0 1 1.1 1.1z"/>
+</svg>
+&nbsp;Instagram
+</a>
+
+<a class="btn" href="https://www.tiktok.com/@platinocr?_r=1&_t=ZS-95agn9Ew779" target="_blank">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
+<path d="M16.5 3c.3 1.6 1.5 2.8 3.1 3v2.3c-1.4 0-2.8-.5-3.9-1.4v6.3a5.3 5.3 0 1 1-5.3-5.3c.3 0 .7 0 1 .1v2.7a2.7 2.7 0 1 0 2.7 2.7V3h2.4z"/>
+</svg>
+&nbsp;TikTok
+</a>
+
+<a class="btn" href="https://pickdeliver.com/platino" target="_blank">
+🚚 Pedir en línea
+</a>
+
+</div>
+</header>
+
+<div class="section-title">Sucursales</div>
+
+<div id="resultadoGPS" style="text-align:center;margin:15px 0;font-weight:bold;color:#ff2a2a;"></div>
+
+
+<!-- CARDS -->
+<div class="card" data-name="🏙️SAN-JOSÉ" data-lat="9.9281" data-lon="-84.0907">
+<img src="imagenes/San José.jpeg">
+<div class="location-name">🏙️SAN-JOSÉ</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0qxue5">📍Maps</a>
+<a href="https://wa.me/50670774301">💬 WhatsApp</a>
+<a href="tel:50670774301">📞 Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️URUCA" data-lat="9.9509" data-lon="-84.1046">
+<img src="imagenes/Uruca.jpeg">
+<div class="location-name">🏙️URUCA</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0w6vvu">📍Maps</a>
+<a href="https://wa.me/50670945854">💬 WhatsApp</a>
+<a href="tel:50670945854">📞 Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️SAN-FRANCISCO-DE-DOS-RÍOS" data-lat="9.9035" data-lon="-84.0598">
+<img src="imagenes/San Francisco de Dos Rios.jpeg">
+<div class="location-name">🏙️SAN-FRANCISCO-DE-DOS-RÍOS</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.app.goo.gl/CtQg8WBTgfC2zT9v7">📍Maps</a>
+<a href="https://wa.me/50670698857">💬 WhatsApp</a>
+<a href="tel:50670698857">📞 Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️DESAMPARADOS" data-lat="9.8967" data-lon="-84.0675">
+<img src="imagenes/Desamparados.jpeg">
+<div class="location-name">🏙️DESAMPARADOS</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0qfx30">📍Maps</a>
+<a href="https://wa.me/50670761774">💬 WhatsApp</a>
+<a href="tel:50670761774">📞Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️CURRIDABAT" data-lat="9.9148" data-lon="-84.0351">
+<img src="imagenes/Curridabat.jpeg">
+<div class="location-name">🏙️CURRIDABAT</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.app.goo.gl/Ruway3fTRGX6CGAJ7">📍Maps</a>
+<a href="https://wa.me/50670707155">💬 WhatsApp</a>
+<a href="tel:50670707155">📞Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️𝗘𝗦𝗖𝗔𝗭Ú" data-lat="9.9287" data-lon="-84.1402">
+<img src="imagenes/Escazu.jpeg">
+<div class="location-name">🏙️ESCAZÚ</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://goo.gl/maps/YTFZNyPqCpH9ow1v9">📍Maps</a>
+<a href="https://wa.me/50670406198">💬 WhatsApp</a>
+<a href="tel:50670406198">📞Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️GUADALUPE" data-lat="9.946300" data-lon="-84.052299">
+<img src="imagenes/Guadalupe.jpeg">
+<div class="location-name">🏙️GUADALUPE</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.google.com/?q=9.946300,-84.052299">📍Maps</a>
+<a href="https://wa.me/50670522590">💬 WhatsApp</a>
+<a href="tel:50670522590">📞Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️SANTA-ANA" data-lat="9.9323" data-lon="-84.1826">
+<img src="imagenes/Santa Ana.jpeg">
+<div class="location-name">🏙️SANTA-ANA</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0krfvw">📍Maps</a>
+<a href="https://wa.me/50670200321">💬 WhatsApp</a>
+<a href="tel:50670200321">📞Call</a>
+</div>
+</div>
+
+<div class="card" data-name="🏙️TIBAS" data-lat="9.9598" data-lon="-84.0849">
+<img src="imagenes/Tibas.jpeg">
+<div class="location-name">🏙️TIBAS</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0wtx4q">📍Maps</a>
+<a href="https://wa.me/50670762081">💬 WhatsApp</a>
+<a href="tel:50670762081">📞Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️CORONADO" data-lat="9.9792" data-lon="-84.0085">
+<img src="imagenes/Coronado.jpeg">
+<div class="location-name">🏙️CORONADO</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u28r8qr">📍Maps</a>
+<a href="https://wa.me/50670241198">💬 WhatsApp</a>
+<a href="tel:50670241198">📞Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️ALAJUELITA" data-lat="9.8985" data-lon="-84.1035">
+<img src="imagenes/Alajuelita.jpeg">
+<div class="location-name">🏙️ALAJUELITA</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0qh30v">📍Maps</a>
+<a href="https://wa.me/50670406240">💬 WhatsApp</a>
+<a href="tel:50670406240">📞Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️PAVAS" data-lat="9.9397" data-lon="-84.1334">
+<img src="imagenes/Pavas.jpeg">
+<div class="location-name">🏙️PAVAS</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0td6e7">📍Maps</a>
+<a href="https://wa.me/50670170106">💬 WhatsApp</a>
+<a href="tel:50670170106">📞Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌄PEREZ-ZELEDON" data-lat="9.3738" data-lon="-83.7030">
+<img src="imagenes/Perez Zeledon.jpeg">
+<div class="location-name">🌄PEREZ-ZELEDON</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1smr38d9">📍Maps</a>
+<a href="https://wa.me/50670998946">💬 WhatsApp</a>
+<a href="tel:50670998946">📞Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏙️CARTAGO" data-lat="9.8654" data-lon="-83.9193">
+<img src="imagenes/Cartago.jpeg">
+<div class="location-name">🏙️CARTAGO</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u24hh2g">📍Maps</a>
+<a href="https://wa.me/50670247903">💬 WhatsApp</a>
+<a href="tel:50670247903">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏞️TURRIALBA" data-lat="9.9040" data-lon="-83.6850">
+<img src="imagenes/Turrialba.jpeg">
+<div class="location-name">🏞️TURRIALBA</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u2rfb6h">📍Maps</a>
+<a href="https://wa.me/50670672236">💬 WhatsApp</a>
+<a href="tel:50670672236">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏙️HEREDIA-CENTRO" data-lat="9.9995" data-lon="-84.1198">
+<img src="imagenes/heredia-centro.jpeg">
+<div class="location-name">🏙️HEREDIA-CENTRO</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0vuxpe">📍Maps</a>
+<a href="https://wa.me/50670392568">💬 WhatsApp</a>
+<a href="tel:50670392568">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏙️BELÉN-HEREDIA" data-lat="9.9786" data-lon="-84.1869">
+<img src="imagenes/Belen-Heredia.jpeg">
+<div class="location-name">🏙️BELÉN-HEREDIA</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0u0zfr">📍Maps</a>
+<a href="https://wa.me/50670184738">💬 WhatsApp</a>
+<a href="tel:50670184738">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏙️ALAJUELA" data-lat="10.0162" data-lon="-84.2116">
+<img src="imagenes/Alajuela.jpeg">
+<div class="location-name">🏙️ALAJUELA</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u0gx41k">📍Maps</a>
+<a href="https://wa.me/50670774330">💬 WhatsApp</a>
+<a href="tel:50670774330">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏙️SAN-RAMÓN" data-lat="10.0875" data-lon="-84.4703">
+<img src="imagenes/San Ramón.jpeg">
+<div class="location-name">🏙️SAN-RAMÓN</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.app.goo.gl/MXxQv76Tqcs86z4H6">📍Maps</a>
+<a href="https://wa.me/50670655679">💬 WhatsApp</a>
+<a href="tel:50670655679">📞 Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️PALMARES" data-lat="10.0566" data-lon="-84.4369">
+<img src="imagenes/Palmares.jpeg">
+<div class="location-name">🏙️PALMARES</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.app.goo.gl/EDqnEV6UXovo8DMx5">📍Maps</a>
+<a href="https://wa.me/50670883252">💬 WhatsApp</a>
+<a href="tel:50670883252">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌄CIUDAD-QUESADA" data-lat="10.3231" data-lon="-84.4315">
+<img src="imagenes/Ciudad Quesada.jpeg">
+<div class="location-name">🌄CIUDAD-QUESADA</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1gfydw87">📍Maps</a>
+<a href="https://wa.me/50670596322">💬 WhatsApp</a>
+<a href="tel:50670596322">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌴NICOYA-GUANACASTE" data-lat="10.1493" data-lon="-85.4512">
+<img src="imagenes/Nicoya.jpeg">
+<div class="location-name">🌴NICOYA-GUANACASTE</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1g1z944c">📍Maps</a>
+<a href="https://wa.me/50670216382">💬 WhatsApp</a>
+<a href="tel:50670216382">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌴CAÑAS-GUANACASTE" data-lat="10.4302" data-lon="-85.0952">
+<img src="imagenes/Cañas, Guanacaste.jpeg">
+<div class="location-name">🌴CAÑAS-GUANACASTE</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.app.goo.gl/YQSYSA89q5HK3NwDA">📍Maps</a>
+<a href="https://wa.me/50670246540">💬 WhatsApp</a>
+<a href="tel:50670246540">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌴SANTA-CRUZ-GUANACASTE" data-lat="10.2611" data-lon="-85.5855">
+<img src="imagenes/Santa Cruz.jpeg">
+<div class="location-name">🌴SANTA-CRUZ-GUANACASTE</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1g4kmn26">📍Maps</a>
+<a href="https://wa.me/50670850448">💬 WhatsApp</a>
+<a href="tel:50670850448">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌴LIBERIA-GUANACASTE" data-lat="10.6350" data-lon="-85.4377">
+<img src="imagenes/Liberia Guanacaste.jpeg">
+<div class="location-name">🌴LIBERIA-GUANACASTE</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1ghrxnme">📍Maps</a>
+<a href="https://wa.me/50670162112">💬 WhatsApp</a>
+<a href="tel:50670162112">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌊PUNTARENAS" data-lat="9.9765" data-lon="-84.8298">
+<img src="imagenes/Puntarenas.jpeg">
+<div class="location-name">🌊PUNTARENAS</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.app.goo.gl/U98jBtvsXJkEdUvb9">📍Maps</a>
+<a href="https://wa.me/50670144608">💬 WhatsApp</a>
+<a href="tel:50670144608">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏝️OROTINA" data-lat="9.911176" data-lon="-84.524384">
+<img src="imagenes/Orotina.jpeg">
+<div class="location-name">🏝️OROTINA</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.google.com/?q=9.911176,-84.524384">📍Maps</a>
+<a href="https://wa.me/50670200480">💬 WhatsApp</a>
+<a href="tel:50670200480">📞 Call</a>
+</div>
+</div>
+
+
+<div class="card" data-name="🏙️CIUDAD-NEILY" data-lat="8.6468" data-lon="-82.9506">
+<img src="imagenes/Ciudad Neily.jpeg">
+<div class="location-name">🏙️CIUDAD-NEILY</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1t10t9yt">📍Maps</a>
+<a href="https://wa.me/50670744452">💬 WhatsApp</a>
+<a href="tel:50670744452">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌊LIMÓN-CENTRO" data-lat="9.9907" data-lon="-83.0350">
+<img src="imagenes/Limón.jpeg">
+<div class="location-name">🌊LIMÓN-CENTRO</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1uby3bk7">📍Maps</a>
+<a href="https://wa.me/50670122319">💬 WhatsApp</a>
+<a href="tel:50670122319">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌿SIQUIRRES" data-lat="10.0975" data-lon="-83.5067">
+<img src="imagenes/Siquirres.jpeg">
+<div class="location-name">🌿SIQUIRRES</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u97tz5r">📍Maps</a>
+<a href="https://wa.me/50670672235">💬 WhatsApp</a>
+<a href="tel:50670672235">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🌿GUÁPILES" data-lat="10.2123" data-lon="-83.7852">
+<img src="imagenes/Guapiles.jpeg">
+<div class="location-name">🌿GUÁPILES</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u97tz5r">📍Maps</a>
+<a href="https://wa.me/50670178175">💬 WhatsApp</a>
+<a href="tel:50670178175">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏙️FORROS-SAN JOSÉ" data-lat="9.9228" data-lon="-84.0972">
+<img src="imagenes/Forros San José.jpeg">
+<div class="location-name">🏙️FORROS-SAN JOSÉ</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://maps.app.goo.gl/aJAiNisgSyCjLmtM9">📍Maps</a>
+<a href="https://wa.me/50670216379">💬 WhatsApp</a>
+<a href="tel:50670216379">📞 Call</a>
+</div>
+</div>
+
+
+
+<div class="card" data-name="🏙️FORROS-CARTAGO" data-lat="9.8649" data-lon="-83.9205">
+<img src="imagenes/Forros Cartago.jpeg">
+<div class="location-name">🏙️FORROS-CARTAGO</div>
+<div class="status"></div>
+<div class="actions">
+<a href="https://waze.com/ul/hd1u24hpfm">📍Maps</a>
+<a href="https://wa.me/50670594706">💬 WhatsApp</a>
+<a href="tel:50670594706">📞 Call</a>
+</div>
+</div>
+
+
+
+<footer>Platino Accesorios – COSTA RICA</footer>
+</div>
+
+<button id="nearBtn">Sucursal más cercana</button>
+
+<script>
+const cards = document.querySelectorAll(".card");
+
+/* SCROLL ANIMADO */
+function reveal(){
+let windowHeight = window.innerHeight;
+
+cards.forEach(card=>{
+let elementTop = card.getBoundingClientRect().top;
+
+if(elementTop < windowHeight - 100){
+card.classList.add("active");
+}else{
+card.classList.remove("active");
+}
+});
+}
+
+window.addEventListener("scroll", reveal);
+reveal();
+
+/* ENFOQUE PRO */
+const observer = new IntersectionObserver((entries)=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+
+document.querySelectorAll(".card").forEach(c=>{
+c.classList.remove("focus","blur");
+});
+
+entry.target.classList.add("focus");
+
+document.querySelectorAll(".card").forEach(c=>{
+if(c !== entry.target){
+c.classList.add("blur");
+}
+});
+
+}
+});
+},{threshold:0.6});
+
+cards.forEach(card=>{
+observer.observe(card);
+});
+
+/* HORARIOS */
+const horarios = {
+"SAN-JOSÉ":"8:30am - 5:30pm",
+"ALAJUELITA":"9am - 6pm",
+"HEREDIA-CENTRO":"9am - 6pm",
+"BELÉN-HEREDIA":"9am - 6pm"
+};
+
+cards.forEach(card=>{
+let name = card.dataset.name;
+let horario = horarios[name] || "8:30am - 5:30pm";
+
+let div = document.createElement("div");
+div.style.fontSize = "0.8rem";
+div.style.color = "#9aa4b2";
+div.innerText = "🕒 " + horario;
+
+card.insertBefore(div, card.querySelector(".status"));
+});
+
+/* ESTADO */
+function getEstado(){
+let now = new Date();
+let h = now.getHours();
+let m = now.getMinutes();
+let actual = h + m/60;
+
+let open = 8.5;
+let close = 17.5;
+
+if(actual >= open && actual < close){
+
+if(close - actual <= 1){
+return {txt:"🟡 Por cerrar", cls:"closing"};
+}
+
+return {txt:"🟢 Abierto ahora", cls:"open"};
+
+}else{
+return {txt:"🔴 Cerrado", cls:"closed"};
+}
+}
+
+cards.forEach(card=>{
+let estado = getEstado();
+let el = card.querySelector(".status");
+
+el.textContent = estado.txt;
+el.classList.add(estado.cls);
+});
+
+/* 🔥 GPS PRO */
+document.getElementById("nearBtn").onclick = () => {
+
+const resultado = document.getElementById("resultadoGPS");
+
+navigator.geolocation.getCurrentPosition(pos=>{
+
+let uLat = pos.coords.latitude;
+let uLon = pos.coords.longitude;
+
+let nearest = null;
+let min = Infinity;
+
+cards.forEach(card=>{
+let lat = parseFloat(card.dataset.lat);
+let lon = parseFloat(card.dataset.lon);
+
+if(isNaN(lat) || isNaN(lon)) return;
+
+let d = Math.sqrt((uLat-lat)**2 + (uLon-lon)**2);
+
+if(d < min){
+min = d;
+nearest = card;
+}
+});
+
+if(!nearest){
+alert("No se pudo calcular 😅");
+return;
+}
+
+/* SCROLL */
+window.scrollTo({
+top: nearest.offsetTop - 80,
+behavior: "smooth"
+});
+
+/* EFECTO */
+cards.forEach(c=>{
+c.style.boxShadow="";
+c.style.transform="";
+});
+
+nearest.style.boxShadow="0 0 40px red, 0 0 80px rgba(255,0,0,.6)";
+nearest.style.transform="scale(1.05)";
+
+/* TEXTO */
+let nombre = nearest.querySelector(".location-name").textContent;
+
+if(resultado){
+resultado.innerHTML =
+"📍 <b>" + nombre + "</b><br>🚗 cerca de ti<br>" +
+"<button onclick='abrirRuta(" + nearest.dataset.lat + "," + nearest.dataset.lon + ")' style='margin-top:8px;padding:8px 12px;border:none;border-radius:8px;background:#ff2a2a;color:white;cursor:pointer;'>Ir ahora</button>";
+}
+
+},()=>{
+alert("Activa la ubicación 😅");
+});
+};
+
+/* GOOGLE MAPS */
+function abrirRuta(lat, lon){
+window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`);
+}
+</script>
